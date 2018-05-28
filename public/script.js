@@ -2,13 +2,13 @@ new Vue({
     el: '#app',
     data: {
         total: 0,
-        items: [
-            { id: 1, title: 'Item 1', price: 9.99 },
-            { id: 2, title: 'Item 2', price: 19.99 },
-            { id: 3, title: 'Item 3', price: 29.91 }
-        ],
+        items: [],
         cart: [],
-        search: ''
+        search: '',
+        lastSearch: '',
+        showSearchAmount: false,
+        loading: false,
+        loadingGif: 'lg.pie-chart-loading-gif.gif'
     },
     filters: {
         toCurrency: function(price) {
@@ -17,7 +17,17 @@ new Vue({
     },
     methods: {
         onSubmit: function () {
-            // TODO filter to what the search passes using vue-resource or some shit
+            this.items = [];
+            this.loading = true;
+            this.$http
+                .get('/search/'.concat(this.search))
+                    .then(function(res) {
+                        this.lastSearch = this.search;
+                        this.items = res.data;
+                        this.showSearchAmount = true;
+                        this.loading = false;
+                    });
+            
         },
         addItem: function (index) {
             var item = this.items[index];
@@ -32,7 +42,7 @@ new Vue({
                 });
                 this.total += item.price;
             } else {
-                inc(item);
+                this.inc(item);
             }
         },
         inc: function(item) {

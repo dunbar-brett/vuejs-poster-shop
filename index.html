@@ -24,9 +24,22 @@
     </div>
     <div class="main">
         <div class="products">
+            <div v-if="loading">
+                <img v-bind:src="{{loadingGif}}">
+            </div>
+            <div v-else class="search-results">
+                Found {{items.length}} results for search term {{lastSearch}}.
+            </div>
             <div class="product" v-for="(item, index) in items">
-                <h4 class="product-title">{{item.title}}</h4>
-                <button v-on:click="addItem(index)" class="add-to-cart btn">Add to cart</button>
+                <div>
+                    <div class="product-image">
+                        <img v-bind:src="item.link" >
+                    </div>
+                </div>
+                <div>
+                        <h4 class="product-title">{{item.title}}</h4>
+                        <button v-on:click="addItem(index)" class="add-to-cart btn">Add to cart</button>
+                </div>
             </div>
             
         </div>
@@ -53,6 +66,7 @@
 <!-- Scripts -->
 <script src="/reload/reload.js"></script>
 <script src="node_modules/vue/dist/vue.js"></script>
+<script src="node_modules/vue-resource/dist/vue-resource.js"></script>
 <script type="text/javascript" src="public/script.js"></script>
 
 </body>
