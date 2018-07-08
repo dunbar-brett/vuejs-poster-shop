@@ -8,7 +8,7 @@ new Vue({
         lastSearch: '',
         showSearchAmount: false,
         loading: false,
-        loadingGif: 'lg.pie-chart-loading-gif.gif'
+        loadingGif: 'public/lg.pie-chart-loading-gif.gif'
     },
     filters: {
         toCurrency: function(price) {

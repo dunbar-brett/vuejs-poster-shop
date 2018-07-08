@@ -25,7 +25,7 @@
     <div class="main">
         <div class="products">
             <div v-if="loading">
-                <img v-bind:src="{{loadingGif}}">
+                <img v-bind:src="loadingGif">
             </div>
             <div v-else class="search-results">
                 Found {{items.length}} results for search term {{lastSearch}}.
