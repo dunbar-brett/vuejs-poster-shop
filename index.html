@@ -37,26 +37,29 @@
                     </div>
                 </div>
                 <div>
-                        <h4 class="product-title">{{item.title}}</h4>
-                        <button v-on:click="addItem(index)" class="add-to-cart btn">Add to cart</button>
+                    <h4 class="product-title">{{item.title}}</h4>
+                    <p>Price: <strong> {{price | toCurrency }}</strong></p>
+                    <button v-on:click="addItem(index)" class="add-to-cart btn">Add to cart</button>
                 </div>
             </div>
             
         </div>
         <div class="cart">
             <h2>Shopping Cart</h2>
-            <ul>
-                <li class="cart-item" v-for="(item, index) in cart">
+            <transition-group name="fade" tag="ul">
+                <li class="cart-item" v-bind:key="item.id" v-for="(item, index) in cart">
                     <div class="item-title">{{item.title}}</div>
                     <span class="item-qty">{{item.price | toCurrency}} x {{item.qty}}</span>
                     <button class="btn" v-on:click="inc(item)">+</button>
                     <button class="btn" v-on:click="dec(item, index)">-</button>
                 </li>
-            </ul>
-            <div v-if="cart.length" >
-                <div>Total: {{ total | toCurrency }}</div>
-            </div>
-            <div v-else class="empty-cart">
+            </transition-group>
+            <transition name="fade">
+                <div v-if="cart.length" >
+                    <div>Total: {{ total | toCurrency }}</div>
+                </div>
+            </transition>
+            <div v-if="cart.length === 0" class="empty-cart">
                 <div>No items in the cart</div>
             </div>
         </div>
