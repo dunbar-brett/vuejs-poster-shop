@@ -1,13 +1,14 @@
 var PRICE = 9.99;
+var LOADNUM = 10;
 new Vue({
     el: '#app',
     data: {
         total: 0,
         items: [],
         cart: [],
-        search: 'anime',
+        results: [],
+        search: '90s',
         lastSearch: '',
-        showSearchAmount: false,
         loading: false,
         loadingGif: 'public/lg.pie-chart-loading-gif.gif',
         price: PRICE
@@ -18,6 +19,12 @@ new Vue({
         }
     },
     methods: {
+        appendItems: function() {
+            if (this.items.length < this.results.length) {
+                var append = this.results.slice(this.items.length, this.items.length + LOADNUM);
+                this.items = this.items.concat(append);
+            }
+        },
         onSubmit: function () {
             this.items = [];
             this.loading = true;
@@ -25,8 +32,8 @@ new Vue({
                 .get('/search/'.concat(this.search))
                     .then(function(res) {
                         this.lastSearch = this.search;
-                        this.items = res.data;
-                        this.showSearchAmount = true;
+                        this.results = res.data;
+                        this.appendItems(); 
                         this.loading = false;
                     });
             
@@ -69,5 +76,18 @@ new Vue({
     },
     mounted: function() {
         this.onSubmit();
+
+        var self = this;
+        var elem = document.getElementById('product-list-bottom');
+        var watcher = scrollMonitor.create(elem);
+        watcher.enterViewport(function() {
+            self.appendItems();
+        }); 
+    },
+    computed: {
+        noMoreItems: function() {
+            return this.items.length === this.results.length && this.results.length != 0;
+        }
     }
 });
+
